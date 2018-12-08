@@ -101,6 +101,14 @@ p.big {
           </span>
         </div>
         <br>
+        <div class="input-group">
+          <span class="label-success input-group-addon">Translation Details</span>
+          <input ng-model="opctrl.detailsApiKeys" ng-blur="opctrl.setDetailsApi()" type="text" class="form-control">
+          <span class="input-group-btn">
+              <a class="btn btn-success" href="https://tech.yandex.com/dictionary" target="_blank"><span>Get Free Key</span></a>
+          </span>
+        </div>
+        <br>
         <p class="big">
           <span class="label label-danger"><span data-translate="note">Note</span>:</span>
           <span data-translate="needHelp1">If you need help with getting a key, watch the </span><a href="https://www.youtube.com/watch?v=VgpQ48YHGXs" target="_blank" data-toggle="tooltip" data-placement="bottom" title="How to Configure">Tutorial on How to Configure Mind the Word</a> <span data-translate="needHelp2">on YouTube. You can watch other tutorials  </span><a href="https://www.youtube.com/channel/UCBCIhZSb0cVw4xaF3SZbDvA" target="_blank"><span data-translate="needHelp3"><br>here</span></a>.
