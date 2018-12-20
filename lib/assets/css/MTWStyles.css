@@ -151,3 +151,16 @@ span.mtwTranslatedWordh {
     margin-left: 40px;
     font-size: 11px;
 }
+
+.hc-info-details-not {
+    font-size: 13px;
+    color: black;
+    line-height: 150%;
+    display: block;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: scroll;
+    text-align: center;
+}
