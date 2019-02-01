@@ -5,6 +5,10 @@ var gulp = require('gulp'),
   runSequence = require('run-sequence'),
   minify = require('gulp-minify');
 
+const chromePath = './lib/chrome',
+      firefoxPath = './lib/firefox',
+      corePath = './lib/core';
+
 gulp.task('default', function() {
   console.log('Please use the following gulp tasks: watch, clean, bundle, build');
 });
@@ -15,54 +19,97 @@ gulp.task('clean', function() {
   });
 });
 
-gulp.task('bundle-options', function() {
-  return gulp.src('./lib/scripts/controllers/options.js')
+gulp.task('bundle-options-chrome', function() {
+  return gulp.src(chromePath + '/scripts/controllers/options.js')
     .pipe(jspm({
       selfExecutingBundle: true
     }))
     .pipe(rename('options.js'))
-    .pipe(gulp.dest('./lib'));
+    .pipe(gulp.dest(chromePath));
 });
 
-gulp.task('bundle-popup', function() {
-  return gulp.src('./lib/scripts/controllers/popup.js')
+gulp.task('bundle-options-firefox', function() {
+  return gulp.src(firefoxPath + '/scripts/controllers/options.js')
+    .pipe(jspm({
+      selfExecutingBundle: true
+    }))
+    .pipe(rename('options.js'))
+    .pipe(gulp.dest(firefoxPath));
+});
+
+gulp.task('bundle-popup-chrome', function() {
+  return gulp.src(chromePath + '/scripts/controllers/popup.js')
     .pipe(jspm({
       selfExecutingBundle: true
     }))
     .pipe(rename('popup.js'))
-    .pipe(gulp.dest('./lib'));
+    .pipe(gulp.dest(chromePath));
 });
 
-gulp.task('bundle-event', function() {
-  return gulp.src('./lib/scripts/eventPage.js')
+gulp.task('bundle-popup-firefox', function() {
+  return gulp.src(firefoxPath + '/scripts/controllers/popup.js')
+    .pipe(jspm({
+      selfExecutingBundle: true
+    }))
+    .pipe(rename('popup.js'))
+    .pipe(gulp.dest(firefoxPath));
+});
+
+gulp.task('bundle-event-chrome', function() {
+  return gulp.src(chromePath + '/scripts/eventPage.js')
     .pipe(jspm({
       selfExecutingBundle: true
     }))
     .pipe(rename('eventPage.js'))
-    .pipe(gulp.dest('./lib'));
+    .pipe(gulp.dest(chromePath));
 });
 
-gulp.task('bundle-content', function() {
-  return gulp.src('./lib/scripts/mtw.js')
+gulp.task('bundle-event-firefox', function() {
+  return gulp.src(firefoxPath + '/scripts/eventPage.js')
+    .pipe(jspm({
+      selfExecutingBundle: true
+    }))
+    .pipe(rename('eventPage.js'))
+    .pipe(gulp.dest(firefoxPath));
+});
+
+gulp.task('bundle-content-chrome', function() {
+  return gulp.src(chromePath + '/scripts/mtw.js')
     .pipe(jspm({
       selfExecutingBundle: true
     }))
     .pipe(rename('mtw.js'))
-    .pipe(gulp.dest('./lib'));
+    .pipe(gulp.dest(chromePath));
 });
 
-gulp.task('watch', ['bundle-options', 'bundle-popup', 'bundle-content', 'bundle-event'], function() {
-  gulp.watch('./lib/scripts/controllers/options.js', ['bundle-options']);
-  gulp.watch('./lib/scripts/controllers/popup.js', ['bundle-popup']);
-  gulp.watch('./lib/scripts/mtw.js', ['bundle-content']);
-  gulp.watch('./lib/scripts/eventPage.js', ['bundle-event']);
-  gulp.watch('./lib/scripts/services/*.js', ['bundle-content', 'bundle-event']);
-  gulp.watch('./lib/scripts/utils/defaultStorage.js', ['bundle-options','bundle-event']);
+gulp.task('bundle-content-firefox', function() {
+  return gulp.src(firefoxPath + '/scripts/mtw.js')
+    .pipe(jspm({
+      selfExecutingBundle: true
+    }))
+    .pipe(rename('mtw.js'))
+    .pipe(gulp.dest(firefoxPath));
+});
+
+gulp.task('watch', ['bundle-options-chrome', 'bundle-options-firefox', 'bundle-popup-chrome', 'bundle-popup-firefox',
+         'bundle-content-chrome', 'bundle-content-firefox', 'bundle-event-chrome', 'bundle-event-firefox'], function() {
+  gulp.watch(chromePath + '/scripts/controllers/options.js', ['bundle-options-chrome']);
+  gulp.watch(firefoxPath + '/scripts/controllers/options.js', ['bundle-options-firefox']);
+  gulp.watch(chromePath + '/scripts/controllers/popup.js', ['bundle-popup-chrome']);
+  gulp.watch(firefoxPath + '/scripts/controllers/popup.js', ['bundle-popup-firefox']);
+  gulp.watch(chromePath + '/scripts/mtw.js', ['bundle-content-chrome']);
+  gulp.watch(firefoxPath + '/scripts/mtw.js', ['bundle-content-firefox']);
+  gulp.watch(chromePath + '/scripts/eventPage.js', ['bundle-event-chrome']);
+  gulp.watch(firefoxPath + '/scripts/eventPage.js', ['bundle-event-firefox']);
+  gulp.watch(chromePath + '/scripts/services/*.js', ['bundle-content-chrome', 'bundle-event-chrome']);
+  gulp.watch(firefoxPath + '/scripts/services/*.js', ['bundle-content-firefox', 'bundle-event-firefox']);
+  gulp.watch(chromePath + '/scripts/utils/defaultStorage.js', ['bundle-options-chrome','bundle-event-chrome']);
+  gulp.watch(firefoxPath + '/scripts/utils/defaultStorage.js', ['bundle-options-firefox','bundle-event-firefox']);
   
 });
 
-gulp.task('minify', function () {
-  return gulp.src('./lib/*.js')
+gulp.task('minify-chrome', function () {
+  return gulp.src(chromePath + '/*.js')
     .pipe(minify({
       ext: {
         min: '.js'
@@ -70,27 +117,41 @@ gulp.task('minify', function () {
       noSource: true,
       mangle: false
     }))
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest('./dist/chrome'));
+});
+
+gulp.task('minify-firefox', function () {
+  return gulp.src(firefoxPath + '/*.js')
+    .pipe(minify({
+      ext: {
+        min: '.js'
+      },
+      noSource: true,
+      mangle: false
+    }))
+    .pipe(gulp.dest('./dist/firefox'));
 });
 
 gulp.task('copy-dist', function () {
-  gulp.src('./lib/_locales/**/*').pipe(gulp.dest('./dist/_locales/'));
-  gulp.src('./lib/assets/**/*').pipe(gulp.dest('./dist/assets/'));
-  gulp.src('./lib/styles/**/*').pipe(gulp.dest('./dist/styles/'));
-  gulp.src('./lib/common/*').pipe(gulp.dest('./dist/common/'));
-  gulp.src('./lib/views/**/*').pipe(gulp.dest('./dist/views/'));
-  return gulp.src('./lib/manifest.json').pipe(gulp.dest('./dist/'));
+  gulp.src(corePath + '/_locales/**/*').pipe(gulp.dest('./dist/chrome/_locales/')).pipe(gulp.dest('./dist/firefox/_locales/'));
+  gulp.src(corePath + '/assets/**/*').pipe(gulp.dest('./dist/chrome/assets/')).pipe(gulp.dest('./dist/firefox/assets/'));
+  gulp.src(corePath + '/styles/**/*').pipe(gulp.dest('./dist/chrome/styles/')).pipe(gulp.dest('./dist/firefox/styles/'));
+  gulp.src(corePath + '/common/*').pipe(gulp.dest('./dist/chrome/common/')).pipe(gulp.dest('./dist/firefox/common/'));
+  gulp.src(chromePath + '/views/**/*').pipe(gulp.dest('./dist/chrome/views/'));
+  gulp.src(firefoxPath + '/views/**/*').pipe(gulp.dest('./dist/firefox/views/'));
+  gulp.src(chromePath + '/manifest.json').pipe(gulp.dest('./dist/chrome/'))
+  return gulp.src(firefoxPath + '/manifest.json').pipe(gulp.dest('./dist/firefox/'));
 });
 
 gulp.task('build', function() {
   runSequence('clean',
-    ['bundle-content', 'bundle-options', 'bundle-event',
-    'bundle-popup'], 'minify', 'copy-dist');
+    ['bundle-content-chrome', 'bundle-content-firefox', 'bundle-options-chrome', 'bundle-options-firefox', 'bundle-event-chrome', 
+    'bundle-event-firefox', 'bundle-popup-chrome', 'bundle-popup-firefox'], 'minify-chrome', 'minify-firefox', 'copy-dist');
 });
 
 
 gulp.task('local-build', function() {
   runSequence('clean',
-    ['bundle-content', 'bundle-options', 'bundle-event',
-    'bundle-popup']);
+    ['bundle-content-chrome', 'bundle-content-firefox', 'bundle-options-chrome', 'bundle-options-firefox',
+     'bundle-event-chrome', 'bundle-event-firefox', 'bundle-popup-chrome', 'bundle-popup-firefox']);
 });
