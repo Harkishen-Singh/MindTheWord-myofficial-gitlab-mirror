@@ -149,7 +149,6 @@ gulp.task('build', function() {
     'bundle-event-firefox', 'bundle-popup-chrome', 'bundle-popup-firefox'], 'minify-chrome', 'minify-firefox', 'copy-dist');
 });
 
-
 gulp.task('local-build', function() {
   runSequence('clean',
     ['bundle-content-chrome', 'bundle-content-firefox', 'bundle-options-chrome', 'bundle-options-firefox',
