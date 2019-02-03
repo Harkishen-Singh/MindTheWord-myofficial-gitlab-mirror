@@ -3,11 +3,15 @@ var gulp = require('gulp'),
   jspm = require('gulp-jspm'),
   rename = require('gulp-rename'),
   runSequence = require('run-sequence'),
-  minify = require('gulp-minify');
+  minify = require('gulp-minify'),
+  eslint = require('gulp-eslint'),
+  gulpIf = require('gulp-if'),
+  imagemin = require('gulp-imagemin')
+  ;
 
 const chromePath = './lib/chrome',
-      firefoxPath = './lib/firefox',
-      corePath = './lib/core';
+  firefoxPath = './lib/firefox',
+  corePath = './lib/core';
 
 gulp.task('default', function() {
   console.log('Please use the following gulp tasks: watch, clean, bundle, build');
@@ -92,7 +96,7 @@ gulp.task('bundle-content-firefox', function() {
 });
 
 gulp.task('watch', ['bundle-options-chrome', 'bundle-options-firefox', 'bundle-popup-chrome', 'bundle-popup-firefox',
-         'bundle-content-chrome', 'bundle-content-firefox', 'bundle-event-chrome', 'bundle-event-firefox'], function() {
+  'bundle-content-chrome', 'bundle-content-firefox', 'bundle-event-chrome', 'bundle-event-firefox'], function() {
   gulp.watch(chromePath + '/scripts/controllers/options.js', ['bundle-options-chrome']);
   gulp.watch(firefoxPath + '/scripts/controllers/options.js', ['bundle-options-firefox']);
   gulp.watch(chromePath + '/scripts/controllers/popup.js', ['bundle-popup-chrome']);
@@ -105,7 +109,7 @@ gulp.task('watch', ['bundle-options-chrome', 'bundle-options-firefox', 'bundle-p
   gulp.watch(firefoxPath + '/scripts/services/*.js', ['bundle-content-firefox', 'bundle-event-firefox']);
   gulp.watch(chromePath + '/scripts/utils/defaultStorage.js', ['bundle-options-chrome','bundle-event-chrome']);
   gulp.watch(firefoxPath + '/scripts/utils/defaultStorage.js', ['bundle-options-firefox','bundle-event-firefox']);
-  
+
 });
 
 gulp.task('minify-chrome', function () {
@@ -139,18 +143,47 @@ gulp.task('copy-dist', function () {
   gulp.src(corePath + '/common/*').pipe(gulp.dest('./dist/chrome/common/')).pipe(gulp.dest('./dist/firefox/common/'));
   gulp.src(chromePath + '/views/**/*').pipe(gulp.dest('./dist/chrome/views/'));
   gulp.src(firefoxPath + '/views/**/*').pipe(gulp.dest('./dist/firefox/views/'));
-  gulp.src(chromePath + '/manifest.json').pipe(gulp.dest('./dist/chrome/'))
+  gulp.src(chromePath + '/manifest.json').pipe(gulp.dest('./dist/chrome/'));
   return gulp.src(firefoxPath + '/manifest.json').pipe(gulp.dest('./dist/firefox/'));
 });
 
+gulp.task('esLint',()=>{
+  gulp.src('./lib/**/scripts/**/*.js')
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError())
+    .on('error', function(err) {
+      console.log('Run "gulp-fix" in terminal to fix these errors');
+      process.exit();
+    });
+});
+
+gulp.task('compress-images', () => {
+  gulp.src('lib/assets/img/*')
+    .pipe(imagemin())
+    .pipe(gulp.dest('dist/assets/img'));
+});
+
 gulp.task('build', function() {
-  runSequence('clean',
-    ['bundle-content-chrome', 'bundle-content-firefox', 'bundle-options-chrome', 'bundle-options-firefox', 'bundle-event-chrome', 
-    'bundle-event-firefox', 'bundle-popup-chrome', 'bundle-popup-firefox'], 'minify-chrome', 'minify-firefox', 'copy-dist');
+  runSequence('clean', 'esLint', 'compress-images',
+    ['bundle-content-chrome', 'bundle-content-firefox', 'bundle-options-chrome', 'bundle-options-firefox', 'bundle-event-chrome',
+      'bundle-event-firefox', 'bundle-popup-chrome', 'bundle-popup-firefox'], 'minify-chrome', 'minify-firefox', 'copy-dist');
 });
 
 gulp.task('local-build', function() {
   runSequence('clean',
     ['bundle-content-chrome', 'bundle-content-firefox', 'bundle-options-chrome', 'bundle-options-firefox',
-     'bundle-event-chrome', 'bundle-event-firefox', 'bundle-popup-chrome', 'bundle-popup-firefox']);
+      'bundle-event-chrome', 'bundle-event-firefox', 'bundle-popup-chrome', 'bundle-popup-firefox']);
+});
+
+function isFixed(file) {
+  return file.eslint !== null && file.eslint.fixed;
+}
+
+gulp.task('fix', function () {
+  return gulp.src('./lib/**/scripts/**/*.js')
+    .pipe(eslint({fix:true}))
+    .pipe(eslint.format())
+    .pipe(gulpIf(isFixed, gulp.dest('lib/scripts/')))
+    .pipe(eslint.failAfterError());
 });
