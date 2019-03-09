@@ -127,8 +127,8 @@ span.mtwTranslatedWordh {
 }
 
 .moreInformation {
-    margin: 0px 10px 3px 0px;
-    border-radius:5px;
+    height: 25px;
+    margin: 6px 6px 0px 0px;
 }
 
 .hc-info-details {
@@ -136,7 +136,6 @@ span.mtwTranslatedWordh {
     color: black;
     line-height: 150%;
     display: block;
-    background-color: #fff;
     border-radius: 10px;
     padding: 10px;
     max-height: 200px;
@@ -153,7 +152,6 @@ span.mtwTranslatedWordh {
     color: black;
     line-height: 150%;
     display: block;
-    background-color: #fff;
     border-radius: 10px;
     padding: 10px;
     max-height: 200px;
