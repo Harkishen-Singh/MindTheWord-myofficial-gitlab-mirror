@@ -37,10 +37,6 @@
     transition: all 0.7s ease;
 }
 
-.hc-details {
-    background-color: black;
-}
-
 .mtwSpeak:hover {
     opacity: 1.0;
     -webkit-transition: all 0.7s ease;
@@ -128,4 +124,56 @@ span.mtwTranslatedWordh {
     color:white;
     font-size:12px;
     font-weight: bold;
+}
+
+.moreInformation {
+    height: 25px;
+    margin: 6px 6px 0px 0px;
+}
+
+.hc-info-details {
+    font-size: 13px;
+    color: black;
+    line-height: 150%;
+    display: block;
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: scroll;
+}
+
+.hc-info-details-syn {
+    margin-left: 40px;
+    font-size: 11px;
+}
+
+.hc-info-details-not {
+    font-size: 13px;
+    color: black;
+    line-height: 150%;
+    display: block;
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: scroll;
+    text-align: center;
+}
+
+.onPageQuiz-correct-icon {
+    height: 25px;
+    position: absolute;
+    right: 18px;
+    margin-top: -20px;
+}
+
+.onPageQuiz-wrong-icon {
+    height: 20px;
+    margin-top: -20px;
+    position: absolute;
+    right: 20px;
+}
+
+.onPageQuiz-default {
+    line-height: 1.8;
+    cursor: pointer;
 }
