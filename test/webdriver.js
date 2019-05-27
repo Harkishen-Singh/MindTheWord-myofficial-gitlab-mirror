@@ -205,8 +205,8 @@ describe('Executing tests in chrome environments', function() {
         });
       }, 500);
     });
-
     reloadToHomePage();
+
   });
 
   describe('Pattern Operations', function() {
@@ -287,8 +287,8 @@ describe('Executing tests in chrome environments', function() {
 
     describe('check pattern', function() {
       // reload the page to check angular modules and local chrome
+      reloadToHomePage();
       it('check translation patterns', (done) => {
-        reloadToHomePage();
         driver.findElement(By.xpath(patternOperationsVars.createdYandex)).then(() => {
           // yandex pattern found
           driver.findElement(By.xpath(patternOperationsVars.createdAzure)).then(() => {
@@ -492,6 +492,102 @@ describe('Executing tests in chrome environments', function() {
           });
         });
       });
+
+      describe('Hovercard Operations', function() {
+        it('mark words as learnt', (done) => {
+          driver.get('https://www.google.co.in').then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+              let c=0;
+              // initiate random signals for marking learnt words 
+              for(let i=0; i<10; i++) {
+                // eslint-disable-next-line quotes
+                let cmd = "document.getElementsByClassName('mtwMarkAsLearnt')[" + i + "].click()";
+                driver.executeScript(cmd).then(() => {}, () => {});
+              }
+              setTimeout(() => {
+                done();
+              }, 5000);
+            });
+          });
+            
+        });
+
+        it('verify learnt words', (done) => {
+          driver.get('chrome-extension://jaodmdnaglgheeibgdcgdbhljooejiha/views/options.html').then(() => {
+            driver.findElement(By.xpath('//*[@id="learning-nav"]')).click().then(() => {
+              driver.findElement(By.xpath('//*[@id="learnt-words"]/ul/li[1]')).then(() => {
+                done();
+              });
+            });
+          });
+        });
+
+        it('mark as saved translation', (done) => {
+          driver.get('https://www.google.co.in').then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+              let c=0;
+              // initiate random signals for marking saved translations 
+              for(let i=0; i<10; i++) {
+                // eslint-disable-next-line quotes
+                let cmd = "document.getElementsByClassName('mtwSaveTranslation')[" + i + "].click()";
+                driver.executeScript(cmd).then(() => {}, () => {});
+              }
+              setTimeout(() => {
+                done();
+              }, 5000);
+            });
+            
+          });
+        
+        });
+
+        it('verify saved translations', (done) => {
+          driver.get('chrome-extension://jaodmdnaglgheeibgdcgdbhljooejiha/views/options.html').then(() => {
+            driver.findElement(By.xpath('//*[@id="learning-nav"]')).click().then(() => {
+              driver.findElement(By.xpath('//*[@id="saved-translations"]/div[4]/table/tbody/tr[1]')).then(() => {
+                done();
+              });
+            });
+          });
+        });
+      });
+
+      describe('Testing Popup.html', function() {
+        it('open popup.html', (done) => {
+          driver.get('chrome-extension://jaodmdnaglgheeibgdcgdbhljooejiha/views/popup.html').then(() => {
+            done();
+          });
+        });
+
+        it('toggle operations', (done) => {
+          // assuming always the extension is in the on state when being onInstalled state
+          driver.get('https://www.google.co.in').then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+              driver.get('chrome-extension://jaodmdnaglgheeibgdcgdbhljooejiha/views/popup.html').then(() => {
+                driver.findElement(By.xpath('//*[@id="mtw-Activation-Container"]/div/div/label[1]')).click().then(() => {
+                  driver.get('https://www.google.co.in').then(() => {
+                    driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {}, () => {
+                      // no translation
+                      done();
+                    });
+                  });
+                });
+              });
+            });
+          });
+            
+        });
+        
+      });
+
     });
   }
+
+  describe('Exit browser', function() {
+    it('closing browser service', (done) => {
+      driver.quit();
+      done();
+    });
+  });
+
 }); 
