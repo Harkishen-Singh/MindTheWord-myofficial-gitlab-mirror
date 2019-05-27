@@ -1,9 +1,13 @@
 const webdriver = require('selenium-webdriver'),
   chrome = require('selenium-webdriver/chrome'),
+  until = webdriver.until,
   actionSequence = webdriver.actionSequence,
   bootstrapTourVars = require('./components/bootstrapTour_variables'),
   patternOperationsVars = require('./components/patternsCreation_variables'),
   blacklisttestVars = require('./components/blacklistTest_variables'),
+  yandexTranslationKey = process.env.yandex_key,
+  { performance } = require('perf_hooks'),
+  chromium = require('chromium'),
   Key = webdriver.Key,
   By = webdriver.By;
 
@@ -11,8 +15,16 @@ const webdriver = require('selenium-webdriver'),
   describe, it;
 } require('selenium-webdriver/testing');
 
+require('chromedriver');
+
+if (yandexTranslationKey === undefined) { // key absent
+  console.log('"yandexTranslationKey" not found as environment variable. Translation and lazy loading tests would be skipped.');
+  yandexTranslationKey = 'randomYandexKey1';
+}
+
 // adding browser options
 let chromeOptions = new chrome.Options(), driver;
+chromeOptions.setChromeBinaryPath(chromium.path);
 chromeOptions.addArguments('--no-sandbox');
 chromeOptions.addArguments('--disable-dev-shm-usage');
 chromeOptions.addArguments('--disable-gpu');
@@ -36,7 +48,7 @@ function scrollToElementByxPath(text) {
 
 describe('Executing tests in chrome environments', function() {
   // global test timeout
-  this.timeout(40000);
+  this.timeout(120000);
 
   describe('Creating browser instances', () => {
     it('launching chrome instances with Mind The Word extension', (done) => {
@@ -201,7 +213,7 @@ describe('Executing tests in chrome environments', function() {
 
     it('assign random api keys', (done) => {
       driver.findElement(By.xpath(patternOperationsVars.yandexInputField)).then(field1 => {
-        field1.sendKeys('randomYandexKey1');
+        field1.sendKeys(yandexTranslationKey);
         driver.findElement(By.xpath(patternOperationsVars.azureInputField)).then(field2 => {
           field2.sendKeys('randomAzureKey1');
           driver.findElement(By.xpath(patternOperationsVars.googleInputField)).then(field3 => {
@@ -353,7 +365,17 @@ describe('Executing tests in chrome environments', function() {
     it('blacklisting website', (done) => {
       driver.findElement(By.xpath(blacklisttestVars.bl_websitesInput)).sendKeys('stackoverflow.com').then(() => {
         driver.findElement(By.xpath(blacklisttestVars.add_bl_websites)).click().then(() => {
-          done();
+          driver.findElements(By.className('list-group-item clearfix ng-binding ng-scope')).then(elements => {
+            for( var i=0; i< elements.length; i++) {
+              let ele = elements[i];
+              ele.getText().then((txt) => {
+                if (txt === 'stackoverflow.com') { // resolve only if the recently blacklisted website exists in the blacklist
+                  done();
+                  return;
+                }
+              });
+            }
+          });
         });
       });
     });
@@ -376,10 +398,100 @@ describe('Executing tests in chrome environments', function() {
     it('blacklisting words', (done) => {
       driver.findElement(By.xpath(blacklisttestVars.bl_wordsInput)).sendKeys('this').then(() => {
         driver.findElement(By.xpath(blacklisttestVars.add_bl_words)).click().then(() => {
-          done();
+          driver.findElements(By.className('list-group-item clearfix ng-binding ng-scope')).then(elements => {
+            for( var i=0; i< elements.length; i++) {
+              let ele = elements[i];
+              ele.getText().then((txt) => {
+                if (txt === 'this') { // resolve only if the recently blacklisted word exists in the blacklist
+                  done();
+                  return;
+                }
+              });
+            }
+          });
         });
       });
     });
 
   });
+
+  // only if valid key exists as environment variable
+  if (yandexTranslationKey !== undefined && yandexTranslationKey !== 'randomYandexKey1') {
+    describe('Testing Translations', function() {
+
+      it('creating yandex translation API key from environment variables', (done) => {
+        driver.get('chrome-extension://jaodmdnaglgheeibgdcgdbhljooejiha/views/options.html').then(() => {
+          driver.findElement(By.xpath(patternOperationsVars.yandexInputField)).then((field) => {
+            driver.findElement(By.xpath(patternOperationsVars.patternTranslator)).sendKeys('Yandex').then(() => {
+              driver.findElement(By.xpath(patternOperationsVars.patternPercent)).sendKeys('70').then(() => {
+                driver.findElement(By.xpath(patternOperationsVars.patternSrcLang)).sendKeys('English').then(() => {
+                  driver.findElement(By.xpath(patternOperationsVars.patternTargetLang)).sendKeys('Hindi').then(() => {
+                    setTimeout(() => {
+                      let element = driver.findElement(By.xpath(patternOperationsVars.patternCreationDiv));
+                      driver.executeScript('arguments[0].scrollIntoView()', element).then(() => {
+                        driver.findElement(By.xpath(patternOperationsVars.patternCreateButton)).click().then(() => {
+                          done();
+                        });
+                      });
+                    }, 500);
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+
+      describe('Calculating Translation Time', function() {
+        it('Webpage: https://www.google.co.in', (done) => {
+          driver.get('https://www.google.co.in').then(() => {
+            let beforeTranslation = performance.now();
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+              let afterTranslation = performance.now();
+              done();
+              console.warn('Time taken for translation in "https://www.google.co.in": ' + (afterTranslation - beforeTranslation) + ' milliseconds');
+            });
+          });
+        });
+
+        it('Webpage: https://en.wikipedia.org/wiki/Delhi', (done) => {
+          driver.get('https://en.wikipedia.org/wiki/Delhi').then(() => {
+            let beforeTranslation = performance.now();
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+              let afterTranslation = performance.now();
+              done();
+              console.warn('Time taken for translation in "https://en.wikipedia.org/wiki/Delhi": ' + (afterTranslation - beforeTranslation) + ' milliseconds');
+            });
+          });
+        });
+      });
+
+      describe('Lazy Loading', function() {
+        it('Newer DOMs with translation should add on scroll', (done) => {
+          driver.get('https://www.facebook.com/GoogleSummerOfCode/').then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+              driver.findElements(By.className('mtwTranslatedWord hc-name')).then(elements => {
+                let count = elements.length;
+                setTimeout(() => {
+                  driver.executeScript('window.scrollTo(0, 1000)').then(() => {
+                    setTimeout(() => {
+                      driver.findElements(By.className('mtwTranslatedWord hc-name')).then(elem => {
+                        let newDOMs = elem.length - count;
+                        if (newDOMs !== 0) {
+                          done();
+                          console.log('Newer DOMs: ' + newDOMs);
+                        } else {
+                          throw new Error('Lazy Loading functionality failed');
+                        }
+                      });
+                    }, 3000);
+                  });
+                }, 2000);
+              });
+            });
+          });
+        });
+      });
+    });
+  }
 }); 
