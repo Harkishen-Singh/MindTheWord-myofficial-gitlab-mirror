@@ -7,7 +7,7 @@ build:
   stage: build
   script:
     - apt-get update
-    - apt-get install git-core
+    - apt-get install git-core -y
     - echo "upgrading npm"
     - npm cache clean -f
     - npm install -g n
