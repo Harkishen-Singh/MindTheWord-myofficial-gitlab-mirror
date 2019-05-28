@@ -9,7 +9,7 @@ build:
     - echo "upgrading npm"
     - apt-get install -y nodejs
     - npm -v
-    - sudo npm install -g jspm@2.0.0-beta.1
+    - sudo npm install -g jspm@beta
     - npm install -g gulp minimatch@3.0.2
     - npm up -gf npm
     - npm install gulp
