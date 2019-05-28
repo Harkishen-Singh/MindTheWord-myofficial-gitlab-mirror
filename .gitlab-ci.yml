@@ -8,7 +8,8 @@ build:
   script:
     - whoami
     - npm install -g npm@latest
-    - npm install -g gulp jspm@2.0.0-beta.1
+    - npm install -g gulp
+    - npm install -g jspm@2.0.0-beta.1
     - npm install -g  minimatch@3.0.2
     - npm install gulp
     - npm install
