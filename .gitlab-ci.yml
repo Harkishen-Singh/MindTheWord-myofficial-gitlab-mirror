@@ -19,6 +19,7 @@ build:
     - npm install -g gulp minimatch@3.0.2
     - npm install gulp
     - npm install
+    - jspm
     - jspm install
     - gulp build
 
