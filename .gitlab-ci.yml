@@ -8,9 +8,9 @@ build:
   script:
     - whoami
     - npm install -g npm@latest
-    - npm install -g gulp
+    - npm install -g gulp minimatch@3.0.2
+    - npm i npm -g -f
     - npm install -g jspm
-    - npm install -g  minimatch@3.0.2
     - npm install gulp
     - npm install
     - jspm install
