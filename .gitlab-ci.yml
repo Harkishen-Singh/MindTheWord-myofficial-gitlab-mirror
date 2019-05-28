@@ -7,11 +7,7 @@ build:
   stage: build
   script:
     - echo "upgrading npm"
-    - npm cache clean -f
-    - npm install -g n
-    - n stable
-    - n latest
-    - npm install -g npm@latest
+    - apt-get install -y nodejs
     - npm -v
     - npm install -g jspm@2.0.0-beta.1
     - npm install -g gulp minimatch@3.0.2
