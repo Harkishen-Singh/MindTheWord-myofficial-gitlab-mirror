@@ -1,0 +1,16 @@
+image: harkishen/selenium-ci-aossie-mtw-v1-test:latest
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - apt-get install -y xvfb
+    - npm install -g gulp jspm@2.0.0-beta.1 minimatch@3.0.2
+    - npm install gulp
+    - npm install
+    - jspm install
+    - gulp build
+
+    
