@@ -13,7 +13,7 @@ build:
     - jspm install npm:babel-runtime@5.8.38
     - jspm install bootstrap=npm:bootstrap
     - jspm install
-    - npm install gulp
+    - npm install gulp babel-runtime@5.8.38
     - gulp build
     - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
 
