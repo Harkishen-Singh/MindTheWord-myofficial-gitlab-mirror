@@ -12,6 +12,8 @@ build:
     - npm install chromedriver@2.46 chromium mocha selenium-webdriver gulp
     - jspm install
     - npm install gulp
+    - npm install babel-preset-es2015
+    - npm install babel-preset-react
     - gulp build
     - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
 
