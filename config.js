@@ -17,7 +17,7 @@ System.config({
     "angular": "github:angular/bower-angular@1.5.5",
     "babel": "npm:babel-core",
     "babel-runtime": "npm:babel-runtime",
-    "bootstrap": "github:twbs/bootstrap@3.3.6",
+    "bootstrap": "github:twbs/bootstrap@4.3.1",
     "core-js": "npm:core-js@1.2.6",
     "jquery": "npm:jquery@2.2.3",
     "lodash": "npm:lodash@4.14.0",
