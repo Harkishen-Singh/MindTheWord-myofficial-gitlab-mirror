@@ -9,7 +9,7 @@ build:
     - whoami
     - echo $yandex_key
     - google-chrome -version
-    - npm install -g selenium-webdriver mocha mochawesome
+    - npm install -g selenium-webdriver mocha mochawesome jspm
     - npm install
     - npm install chromedriver chromium mocha selenium-webdriver
     - jspm install bootstrap=npm:bootstrap
