@@ -10,8 +10,8 @@ build:
     - npm install -g selenium-webdriver mocha mochawesome gulp
     - npm install
     - npm install chromedriver@2.46 chromium mocha core-js selenium-webdriver
-    - jspm install bootstrap=npm:bootstrap
     - jspm install
+    - jspm install bootstrap=npm:bootstrap
     - npm install gulp jspm
     - gulp build
     - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
