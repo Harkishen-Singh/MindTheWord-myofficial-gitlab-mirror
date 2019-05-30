@@ -6,7 +6,7 @@ stages:
 build:
   stage: build
   script:
-    - npm instal
+    - npm install
     - jspm install bootstrap=npm:bootstrap
     - jspm install
     - npm install gulp
