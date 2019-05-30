@@ -7,7 +7,7 @@ build:
   stage: build
   script:
     - chromium-browser -version
-    - npm install -g selenium-webdriver mocha mochawesome
+    - npm install -g selenium-webdriver mocha mochawesome gulp
     - npm install
     - npm install chromedriver@2.46 chromium mocha core-js selenium-webdriver
     - jspm install bootstrap=npm:bootstrap
