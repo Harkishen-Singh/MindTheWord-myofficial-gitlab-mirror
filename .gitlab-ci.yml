@@ -9,10 +9,9 @@ build:
     - chromium-browser -version
     - npm install -g selenium-webdriver mocha mochawesome
     - npm install
-    - npm install chromedriver@2.46 chromium mocha selenium-webdriver babel-runtime@5.8.38
-    - npm uninstall -g jspm
-    - npm install -g jspm@0.16x
-    - jspm install npm:babel-runtime@5.8.38
+    - npm install chromedriver@2.46 chromium mocha selenium-webdriver
+    # - npm uninstall -g jspm
+    # - npm install -g jspm@0.16x
     - jspm install bootstrap=npm:bootstrap
     - jspm install
     - npm install gulp
