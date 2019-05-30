@@ -8,10 +8,7 @@ build:
   script:
     - echo $yandex_translation_key
     - chromium-browser -version
-    - dnf install google-chrome-stable -y
-    # - dnf install google-chrome -y
-    # - google-chrome -version
-    - npm install -g selenium-webdriver mocha mochawesome
+    - npm install -g selenium-webdriver mocha mochawesome chromedriver chromium
     - npm install
     - jspm install bootstrap=npm:bootstrap
     - jspm install
