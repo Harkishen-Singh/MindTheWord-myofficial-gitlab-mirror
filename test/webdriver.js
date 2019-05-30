@@ -5,7 +5,6 @@ const webdriver = require('selenium-webdriver'),
   bootstrapTourVars = require('./components/bootstrapTour_variables'),
   patternOperationsVars = require('./components/patternsCreation_variables'),
   blacklisttestVars = require('./components/blacklistTest_variables'),
-  yandexTranslationKey = process.env.yandex_key,
   { performance } = require('perf_hooks'),
   chromium = require('chromium'),
   Key = webdriver.Key,
@@ -16,6 +15,9 @@ const webdriver = require('selenium-webdriver'),
 } require('selenium-webdriver/testing');
 
 require('chromedriver');
+let chromeOptions = new chrome.Options(),
+  driver,
+  yandexTranslationKey = process.env.yandex_key;
 
 if (yandexTranslationKey === undefined) { // key absent
   console.log('"yandexTranslationKey" not found as environment variable. Translation and lazy loading tests would be skipped.');
@@ -23,7 +25,6 @@ if (yandexTranslationKey === undefined) { // key absent
 }
 
 // adding browser options
-let chromeOptions = new chrome.Options(), driver;
 chromeOptions.setChromeBinaryPath(chromium.path);
 chromeOptions.addArguments('--no-sandbox');
 chromeOptions.addArguments('--disable-dev-shm-usage');
