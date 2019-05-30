@@ -15,9 +15,9 @@ System.config({
 
   map: {
     "angular": "github:angular/bower-angular@1.5.5",
-    "babel": "npm:babel-core@7.3.4",
-    "babel-runtime": "npm:babel-runtime@7.3.4",
-    "bootstrap": "github:twbs/bootstrap@4.3.1",
+    "babel": "npm:babel-core@5.8.38",
+    "babel-runtime": "npm:babel-runtime@5.8.38",
+    "bootstrap": "github:twbs/bootstrap@3.3.6",
     "core-js": "npm:core-js@1.2.6",
     "jquery": "npm:jquery@2.2.3",
     "lodash": "npm:lodash@4.14.0",
