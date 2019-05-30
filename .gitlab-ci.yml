@@ -11,8 +11,7 @@ build:
     - npm install
     - npm install chromedriver@2.46 chromium mocha core-js selenium-webdriver
     - jspm install
-    - jspm install bootstrap=npm:bootstrap
-    - npm install gulp jspm
+    - npm install gulp
     - gulp build
     - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
 
