@@ -6,8 +6,6 @@ stages:
 build:
   stage: build
   script:
-    - whoami
-    - echo $yandex_key
     - chromium-browser -version
     - npm install -g selenium-webdriver mocha mochawesome
     - npm install
