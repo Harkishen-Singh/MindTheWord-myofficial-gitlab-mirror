@@ -7,7 +7,13 @@ build:
   stage: build
   script:
     - whoami
+    - echo $yandex_key
     - chromium-browser -version
+    - dnf install fedora-workstation-repositories -y
+    - yum install dnf-plugins-core -y
+    - dnf config-manager --set-enabled google-chrome
+    - dnf install google-chrome-stable -y
+    - google-chrome -version
     - npm install -g selenium-webdriver mocha mochawesome
     - npm install
     - jspm install bootstrap=npm:bootstrap
