@@ -17,7 +17,7 @@ const webdriver = require('selenium-webdriver'),
 // require('chromedriver');
 let chromeOptions = new chrome.Options(),
   driver,
-  yandexTranslationKey = process.env.yandex_translation_key;
+  yandexTranslationKey = process.env.yandex_key;
 
 if (yandexTranslationKey === undefined) { // key absent
   console.log('"yandexTranslationKey" not found as environment variable. Translation and lazy loading tests would be skipped.');

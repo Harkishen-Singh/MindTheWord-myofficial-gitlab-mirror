@@ -7,9 +7,8 @@ build:
   stage: build
   script:
     - whoami
-    - echo $yandex_translation_key
     - chromium-browser -version
-    - npm install -g selenium-webdriver mocha mochawesome chromium
+    - npm install -g selenium-webdriver mocha mochawesome
     - npm install
     - jspm install bootstrap=npm:bootstrap
     - jspm install
