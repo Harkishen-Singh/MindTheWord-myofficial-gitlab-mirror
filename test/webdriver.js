@@ -14,7 +14,7 @@ const webdriver = require('selenium-webdriver'),
   describe, it;
 } require('selenium-webdriver/testing');
 
-require('chromedriver');
+// require('chromedriver');
 let chromeOptions = new chrome.Options(),
   driver,
   yandexTranslationKey = process.env.yandex_key;

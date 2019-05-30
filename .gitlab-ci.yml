@@ -1,4 +1,4 @@
-image: harkishen/selenium-ci-aossie-mtw-v1-test:latest
+image: harkishen/mindtheword_ci_image:latest
 
 stages:
   - build
@@ -8,10 +8,15 @@ build:
   script:
     - whoami
     - echo $yandex_key
-    - google-chrome -version
-    - npm install -g selenium-webdriver mocha mochawesome jspm
+    - chromium-browser -version
+    # - dnf install fedora-workstation-repositories -y
+    # - yum install dnf-plugins-core -y
+    # - dnf config-manager --set-enabled google-chrome
+    # - dnf install google-chrome-stable -y
+    # - google-chrome -version
+    - npm install -g selenium-webdriver mocha mochawesome
     - npm install
-    - npm install chromedriver chromium mocha selenium-webdriver
+    - npm install chromedriver@2.46 chromium mocha selenium-webdriver
     - jspm install bootstrap=npm:bootstrap
     - jspm install
     - npm install gulp
