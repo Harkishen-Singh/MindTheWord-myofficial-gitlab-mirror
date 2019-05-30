@@ -16,6 +16,7 @@ build:
     - google-chrome -version
     - npm install -g selenium-webdriver mocha mochawesome
     - npm install
+    - npm install chromedriver chromium mocha selenium-webdriver
     - jspm install bootstrap=npm:bootstrap
     - jspm install
     - npm install gulp

@@ -37,12 +37,5 @@
     "gulp-rename": "^1.2.2",
     "jsdoc": "^3.4.3",
     "run-sequence": "^1.1.5"
-  },
-  "dependencies": {
-    "chromedriver": "^2.46.0",
-    "chromium": "^2.1.0",
-    "mocha": "^6.1.4",
-    "mochawesome": "^3.1.2",
-    "selenium-webdriver": "^4.0.0-alpha.1"
   }
 }
