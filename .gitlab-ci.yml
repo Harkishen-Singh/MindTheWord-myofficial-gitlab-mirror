@@ -6,7 +6,7 @@ stages:
 build:
   stage: build
   script:
-    - echo $yandex_key
+    - echo $yandex_translation_key
     - npm install -g selenium-webdriver mocha mochawesome
     - npm install
     - jspm install bootstrap=npm:bootstrap
