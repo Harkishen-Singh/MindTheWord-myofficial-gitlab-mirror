@@ -12,6 +12,7 @@ build:
     - npm install chromedriver@2.46 chromium mocha selenium-webdriver
     - jspm install bootstrap=npm:bootstrap
     - jspm install
+    - jspm install npm:babel-runtime@5.8.38
     - npm install gulp
     - gulp build
     - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
