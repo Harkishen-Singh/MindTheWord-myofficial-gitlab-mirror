@@ -1,4 +1,4 @@
-image: harkishen/mindtheword_ci_image:latest
+image: fedora:latest
 
 stages:
   - build
@@ -6,17 +6,21 @@ stages:
 build:
   stage: build
   script:
+    - dnf install chromium nodejs git-all -y
+    - yum install xorg-x11-server-Xvfb -y
+    - node -v && npm -v
+    - npm install -g gulp jspm minimatch@3.0.2
     - chromium-browser -version
     - npm install
     - jspm install bootstrap=npm:bootstrap
     - jspm install
     - npm install gulp
     - gulp build
-    - npm install -g selenium-webdriver mocha mochawesome
-    - npm install chromedriver@2.46 chromium mocha selenium-webdriver
-    - npm install babel-preset-es2015
+    # - npm install -g selenium-webdriver mocha mochawesome
+    # - npm install chromedriver@2.46 chromium mocha selenium-webdriver
+    # - npm install babel-preset-es2015
     # - jspm install npm:babel-preset-es2015
     # - npm uninstall -g jspm
     # - npm install -g jspm@0.16x
-    - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
+    # - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
 
