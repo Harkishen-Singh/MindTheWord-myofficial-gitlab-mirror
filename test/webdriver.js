@@ -5,7 +5,6 @@ const webdriver = require('selenium-webdriver'),
   bootstrapTourVars = require('./components/bootstrapTour_variables'),
   patternOperationsVars = require('./components/patternsCreation_variables'),
   blacklisttestVars = require('./components/blacklistTest_variables'),
-  yandexTranslationKey = process.env.yandex_key,
   { performance } = require('perf_hooks'),
   chromium = require('chromium'),
   Key = webdriver.Key,
@@ -15,7 +14,9 @@ const webdriver = require('selenium-webdriver'),
   describe, it;
 } require('selenium-webdriver/testing');
 
-require('chromedriver');
+let chromeOptions = new chrome.Options(),
+  driver,
+  yandexTranslationKey = process.env.YANDEX_KEY;
 
 if (yandexTranslationKey === undefined) { // key absent
   console.log('"yandexTranslationKey" not found as environment variable. Translation and lazy loading tests would be skipped.');
@@ -23,8 +24,7 @@ if (yandexTranslationKey === undefined) { // key absent
 }
 
 // adding browser options
-let chromeOptions = new chrome.Options(), driver;
-chromeOptions.setChromeBinaryPath(chromium.path);
+chromeOptions.setChromeBinaryPath('/usr/bin/chromium-browser');
 chromeOptions.addArguments('--no-sandbox');
 chromeOptions.addArguments('--disable-dev-shm-usage');
 chromeOptions.addArguments('--disable-gpu');
@@ -48,7 +48,7 @@ function scrollToElementByxPath(text) {
 
 describe('Executing tests in chrome environments', function() {
   // global test timeout
-  this.timeout(120000);
+  this.timeout(180000);
 
   describe('Creating browser instances', () => {
     it('launching chrome instances with Mind The Word extension', (done) => {
@@ -446,7 +446,7 @@ describe('Executing tests in chrome environments', function() {
         it('Webpage: https://www.google.co.in', (done) => {
           driver.get('https://www.google.co.in').then(() => {
             let beforeTranslation = performance.now();
-            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 15000).then(() => {
               let afterTranslation = performance.now();
               done();
               console.warn('Time taken for translation in "https://www.google.co.in": ' + (afterTranslation - beforeTranslation) + ' milliseconds');
@@ -457,7 +457,7 @@ describe('Executing tests in chrome environments', function() {
         it('Webpage: https://en.wikipedia.org/wiki/Delhi', (done) => {
           driver.get('https://en.wikipedia.org/wiki/Delhi').then(() => {
             let beforeTranslation = performance.now();
-            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 15000).then(() => {
               let afterTranslation = performance.now();
               done();
               console.warn('Time taken for translation in "https://en.wikipedia.org/wiki/Delhi": ' + (afterTranslation - beforeTranslation) + ' milliseconds');
@@ -469,7 +469,7 @@ describe('Executing tests in chrome environments', function() {
       describe('Lazy Loading', function() {
         it('Newer DOMs with translation should add on scroll', (done) => {
           driver.get('https://www.facebook.com/GoogleSummerOfCode/').then(() => {
-            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 15000).then(() => {
               driver.findElements(By.className('mtwTranslatedWord hc-name')).then(elements => {
                 let count = elements.length;
                 setTimeout(() => {
@@ -496,7 +496,7 @@ describe('Executing tests in chrome environments', function() {
       describe('Hovercard Operations', function() {
         it('mark words as learnt', (done) => {
           driver.get('https://www.google.co.in').then(() => {
-            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 15000).then(() => {
               let c=0;
               // initiate random signals for marking learnt words 
               for(let i=0; i<10; i++) {
@@ -524,7 +524,7 @@ describe('Executing tests in chrome environments', function() {
 
         it('mark as saved translation', (done) => {
           driver.get('https://www.google.co.in').then(() => {
-            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 15000).then(() => {
               let c=0;
               // initiate random signals for marking saved translations 
               for(let i=0; i<10; i++) {
@@ -562,11 +562,11 @@ describe('Executing tests in chrome environments', function() {
         it('toggle operations', (done) => {
           // assuming always the extension is in the on state when being onInstalled state
           driver.get('https://www.google.co.in').then(() => {
-            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {
+            driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 15000).then(() => {
               driver.get('chrome-extension://jaodmdnaglgheeibgdcgdbhljooejiha/views/popup.html').then(() => {
                 driver.findElement(By.xpath('//*[@id="mtw-Activation-Container"]/div/div/label[1]')).click().then(() => {
                   driver.get('https://www.google.co.in').then(() => {
-                    driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 5000).then(() => {}, () => {
+                    driver.wait(until.elementLocated(By.className('mtwTranslatedWord hc-name')), 15000).then(() => {}, () => {
                       // no translation
                       done();
                     });
