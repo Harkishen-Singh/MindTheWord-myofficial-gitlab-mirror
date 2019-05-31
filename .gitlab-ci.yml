@@ -20,5 +20,5 @@ build:
 
 
 EtE_Tests:
-  stage:
+  stage: EtE_Tests
     - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
