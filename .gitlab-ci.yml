@@ -1,4 +1,4 @@
-image: fedora:latest
+image: harkishen/mindtheword_ci_image_fedora
 
 stages:
   - build
@@ -6,8 +6,6 @@ stages:
 build:
   stage: build
   script:
-    - dnf install chromium nodejs git-all -y
-    - yum install xorg-x11-server-Xvfb -y
     - node -v && npm -v
     - npm install -g gulp jspm minimatch@3.0.2
     - chromium-browser -version
