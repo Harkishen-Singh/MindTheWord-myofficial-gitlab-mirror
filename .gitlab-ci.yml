@@ -7,6 +7,7 @@ stages:
 build:
   stage: build
   script:
+    - echo $YANDEX_KEY
     - node -v && npm -v
     - npm install -g gulp jspm minimatch@3.0.2
     - chromium-browser -version
