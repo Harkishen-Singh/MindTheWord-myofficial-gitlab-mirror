@@ -19,8 +19,8 @@ build:
     - npm install chromedriver@2.46 chromium mocha selenium-webdriver
 
 
-EtE_Tests:
-  stage: EtE_Tests
+ete_test:
+  stage: ete_test
   dependencies:
     - build
   script:
