@@ -2,6 +2,7 @@ image: harkishen/mindtheword_ci_image_fedora
 
 stages:
   - build
+  - EtE_Tests
 
 build:
   stage: build
@@ -16,5 +17,8 @@ build:
     - gulp build
     - npm install -g selenium-webdriver mocha mochawesome
     - npm install chromedriver@2.46 chromium mocha selenium-webdriver
-    - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
 
+
+EtE_Tests:
+  stage:
+    - xvfb-run -s "-screen 0 1920x1080x16" -a npm test
